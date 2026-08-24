@@ -875,14 +875,16 @@ function undo() {
   redoStack.push(snapshot());
   shapes = undoStack.pop();
   selectedIds.clear(); lasso=null;groupXform=null;
-  redraw(); updateAchs(); updateHistoryBtns();
+  if(mode==='3d') buildMesh3D(); else redraw();
+  updateAchs(); updateHistoryBtns();
 }
 function redo() {
   if (!redoStack.length) return;
   undoStack.push(snapshot());
   shapes = redoStack.pop();
   selectedIds.clear(); lasso=null;groupXform=null;
-  redraw(); updateAchs(); updateHistoryBtns();
+  if(mode==='3d') buildMesh3D(); else redraw();
+  updateAchs(); updateHistoryBtns();
 }
 function updateHistoryBtns() {
   const ub = document.getElementById('btn-undo');
@@ -1036,7 +1038,8 @@ function showAchPop(msg, icon, pts){
     if(!shapes.length) return;
     if(!confirm('Apagar todas as formas?')) return;
     pushUndo();shapes=[];selectedIds.clear();
-    redraw();updateAchs();
+    if(mode==='3d') buildMesh3D(); else redraw();
+    updateAchs();
   };
   bot.appendChild(clr);
 
@@ -2365,7 +2368,8 @@ function loadJSON(e){
       shapes=data.shapes.map(s=>({...s,fhPoints:s.fhPoints||undefined}));
       nextId=data.nextId||(Math.max(0,...shapes.map(s=>s.id))+1);
       selectedIds.clear();lasso=null;groupXform=null;
-      redraw();updateAchs();
+      if(mode==='3d') buildMesh3D(); else redraw();
+      updateAchs();
       showToast('📤 Composição carregada — '+shapes.length+' formas');
     }catch(err){showToast('⚠️ Erro: '+err.message);}
     e.target.value='';
@@ -2374,6 +2378,8 @@ function loadJSON(e){
 }
 
 function downloadSTL(){
+  if(!shapes.length){showToast('⚠️ Não há formas para exportar');return;}
+  buildMesh3D();
   if(!mesh3)return;
   const pos=[];
   mesh3.traverse(c=>{
