@@ -876,7 +876,7 @@ function undo() {
   shapes = undoStack.pop();
   selectedIds.clear(); lasso=null;groupXform=null;
   if(mode==='3d') buildMesh3D(); else redraw();
-  updateAchs(); updateHistoryBtns();
+  updateAchs(); updateHistoryBtns(); doAutosave();
 }
 function redo() {
   if (!redoStack.length) return;
@@ -884,7 +884,7 @@ function redo() {
   shapes = redoStack.pop();
   selectedIds.clear(); lasso=null;groupXform=null;
   if(mode==='3d') buildMesh3D(); else redraw();
-  updateAchs(); updateHistoryBtns();
+  updateAchs(); updateHistoryBtns(); doAutosave();
 }
 function updateHistoryBtns() {
   const ub = document.getElementById('btn-undo');
@@ -1040,6 +1040,7 @@ function showAchPop(msg, icon, pts){
     pushUndo();shapes=[];selectedIds.clear();
     if(mode==='3d') buildMesh3D(); else redraw();
     updateAchs();
+    clearAutosave();
   };
   bot.appendChild(clr);
 
@@ -1380,6 +1381,7 @@ function redraw(){
   document.getElementById('hint2d').style.opacity=has?'0':'0.15';
   const _s=document.getElementById('hdr-stl');if(_s)_s.style.opacity=has?'1':'.45';
   const _b3=document.getElementById('btn-3d-float');if(_b3)_b3.style.opacity=has?'1':'.4';
+  scheduleAutosave();
   // actualizar layers se painel aberto
   if(typeof layersOpen!=='undefined'&&layersOpen&&typeof renderLayers==='function') renderLayers();
 }
@@ -2370,12 +2372,46 @@ function loadJSON(e){
       selectedIds.clear();lasso=null;groupXform=null;
       if(mode==='3d') buildMesh3D(); else redraw();
       updateAchs();
+      doAutosave();
       showToast('📤 Composição carregada — '+shapes.length+' formas');
     }catch(err){showToast('⚠️ Erro: '+err.message);}
     e.target.value='';
   };
   reader.readAsText(file);
 }
+
+// ══════════════════════════════════════════════
+// AUTOSAVE (recuperação de sessão)
+// ══════════════════════════════════════════════
+const AUTOSAVE_KEY='monco3d_autosave_v1';
+let autosaveTimer=null;
+function doAutosave(){
+  try{
+    if(!shapes.length){ localStorage.removeItem(AUTOSAVE_KEY); return; }
+    localStorage.setItem(AUTOSAVE_KEY, JSON.stringify({version:1,ts:Date.now(),nextId,shapes}));
+  }catch(e){ /* localStorage indisponível/cheio — ignorar silenciosamente */ }
+}
+function scheduleAutosave(){
+  clearTimeout(autosaveTimer);
+  autosaveTimer=setTimeout(doAutosave,800);
+}
+function clearAutosave(){
+  try{ localStorage.removeItem(AUTOSAVE_KEY); }catch(e){}
+}
+function readAutosave(){
+  try{
+    const raw=localStorage.getItem(AUTOSAVE_KEY);
+    if(!raw) return null;
+    const data=JSON.parse(raw);
+    if(!data||!Array.isArray(data.shapes)||!data.shapes.length) return null;
+    return data;
+  }catch(e){ return null; }
+}
+// rede de segurança: grava periodicamente e ao sair/minimizar,
+// para sobreviver a crashes do browser ou do PC
+setInterval(doAutosave,5000);
+document.addEventListener('visibilitychange',()=>{ if(document.hidden) doAutosave(); });
+window.addEventListener('beforeunload',doAutosave);
 
 function downloadSTL(){
   if(!shapes.length){showToast('⚠️ Não há formas para exportar');return;}
@@ -2774,8 +2810,20 @@ function toggleLayers(){
 })();
 
 // ── Init ─────────────────────────────────
-// Carregar o Monco (logo/mascote) ao arrancar
+// Recuperar sessão não guardada (autosave) ou carregar o Monco (logo/mascote) ao arrancar
 (function loadMonco(){
+  const auto=readAutosave();
+  if(auto){
+    const when=new Date(auto.ts).toLocaleString('pt-PT');
+    if(confirm('Encontrámos um trabalho não guardado de '+when+'. Queres recuperá-lo?')){
+      shapes=auto.shapes.map(s=>({...s,fhPoints:s.fhPoints||undefined}));
+      nextId=auto.nextId||(Math.max(0,...shapes.map(s=>s.id))+1);
+      selectedIds.clear();
+      setTimeout(()=>{ fitAll(); redraw(); updateAchs(); },120);
+      return;
+    }
+    clearAutosave();
+  }
   const moncoShapes=[{"id":24,"type":"hex","x":400,"y":420,"w":208.72441099975057,"h":208.72441099975057,"rot":0,"color":"#29adff","zMm":1,"fhPoints":null},{"id":4,"type":"rect","x":397.66120781133725,"y":219.83401097902623,"w":398.28089978116583,"h":398.28089978116583,"rot":0,"color":"#29adff","zMm":1,"fhPoints":null},{"id":5,"type":"circle","x":300,"y":140,"w":60,"h":60,"rot":0,"color":"#000000","zMm":0,"fhPoints":null},{"id":6,"type":"circle","x":500,"y":140,"w":60,"h":60,"rot":0,"color":"#000000","zMm":0,"fhPoints":null},{"id":7,"type":"rect","x":400,"y":320,"w":305.9999999999999,"h":113.99999999999989,"rot":0,"color":"#ff6b35","zMm":3,"fhPoints":null},{"id":8,"type":"rect","x":280,"y":320,"w":40,"h":85.33331298828114,"rot":0,"color":"#ffec27","zMm":5,"fhPoints":null},{"id":9,"type":"rect","x":340,"y":320,"w":40,"h":85.33331298828114,"rot":0,"color":"#ffec27","zMm":5,"fhPoints":null},{"id":10,"type":"rect","x":400,"y":320,"w":40,"h":85.33331298828114,"rot":0,"color":"#ffec27","zMm":5,"fhPoints":null},{"id":11,"type":"rect","x":460,"y":320,"w":40,"h":85.33331298828114,"rot":0,"color":"#ffec27","zMm":5,"fhPoints":null},{"id":12,"type":"rect","x":520,"y":320,"w":40,"h":85.33331298828114,"rot":0,"color":"#ffec27","zMm":5,"fhPoints":null},{"id":13,"type":"circle","x":300,"y":140,"w":103.19249395337135,"h":103.19249395337135,"rot":0,"color":"#ff6b35","zMm":3,"fhPoints":null},{"id":14,"type":"circle","x":500,"y":140,"w":103.19249395337135,"h":103.19249395337135,"rot":0,"color":"#ff6b35","zMm":3,"fhPoints":null},{"id":16,"type":"triangle","x":420,"y":-60,"w":57.680486611947344,"h":187.37370589358073,"rot":0.15890555645628224,"color":"#29adff","zMm":1,"fhPoints":null},{"id":17,"type":"circle","x":440,"y":-160,"w":60,"h":60,"rot":0,"color":"#ffec27","zMm":5,"fhPoints":null},{"id":18,"type":"rect","x":620,"y":220,"w":64.14049468475059,"h":93.75838490516512,"rot":0,"color":"#29adff","zMm":1,"fhPoints":null},{"id":21,"type":"circle","x":660,"y":220,"w":92.14236922570421,"h":93.75838490516512,"rot":0,"color":"#29adff","zMm":1,"fhPoints":null},{"id":22,"type":"circle","x":140,"y":220,"w":92.14236922570421,"h":93.75838490516512,"rot":0,"color":"#29adff","zMm":1,"fhPoints":null},{"id":23,"type":"rect","x":180,"y":220,"w":64.14049468475059,"h":93.75838490516512,"rot":0,"color":"#29adff","zMm":1,"fhPoints":null},{"id":25,"type":"circle","x":660,"y":220,"w":56.267079384099716,"h":57.25390535011591,"rot":0,"color":"#ff6b35","zMm":3,"fhPoints":null},{"id":26,"type":"circle","x":140,"y":220,"w":56.267079384099716,"h":57.25390535011591,"rot":0,"color":"#ff6b35","zMm":3,"fhPoints":null}];
   shapes=moncoShapes.map(s=>({...s,fhPoints:s.fhPoints||undefined}));
   nextId=27;
