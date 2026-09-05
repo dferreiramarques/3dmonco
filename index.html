@@ -110,6 +110,122 @@ button{cursor:pointer;border:none;font-family:inherit;background:none}
   cursor:pointer;background:none;border:none;padding:4px 8px;
 }
 #credits-close:hover{color:var(--ant-color-text)}
+
+/* ── Sala de aula: modais (join / brief / professor) ─────────────── */
+.cm-modal{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(6px);
+  display:none;align-items:center;justify-content:center;
+}
+.cm-modal.open{display:flex}
+.cm-inner{
+  background:var(--ant-color-bg-elevated);
+  border:1px solid var(--ant-color-border);
+  border-radius:16px;padding:28px 32px;max-width:380px;width:90%;
+  position:relative;max-height:85vh;overflow-y:auto;
+}
+.cm-inner-wide{max-width:640px}
+.cm-inner h3{font-size:18px;font-weight:800;color:var(--ant-color-text);margin-bottom:14px}
+.cm-inner h4{font-size:13px;font-weight:700;color:var(--ant-color-text-secondary);margin:14px 0 8px;text-transform:uppercase;letter-spacing:.04em}
+.cm-inner label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--ant-color-text-secondary);margin-bottom:10px}
+.cm-inner input,.cm-inner textarea{
+  background:var(--ant-color-fill-tertiary);border:1px solid var(--ant-color-border);
+  border-radius:8px;padding:8px 10px;font-size:14px;color:var(--ant-color-text);
+  font-family:inherit;width:100%;box-sizing:border-box;
+}
+.cm-inner textarea{resize:vertical;margin-bottom:10px}
+.cm-close{
+  position:absolute;top:10px;right:12px;font-size:16px;
+  color:var(--ant-color-text-tertiary);cursor:pointer;background:none;border:none;padding:4px 8px;
+}
+.cm-close:hover{color:var(--ant-color-text)}
+.cm-error{
+  background:rgba(255,77,79,.12);border:1px solid rgba(255,77,79,.4);color:#ff7875;
+  border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;margin-bottom:12px;display:none;
+}
+.cm-error.show{display:block}
+.cm-hint{font-size:11px;color:var(--ant-color-text-tertiary);margin-bottom:14px;line-height:1.5}
+.cm-submit{
+  background:#1677ff;color:#fff;border:none;border-radius:8px;
+  padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-bottom:8px;
+}
+.cm-submit:hover{opacity:.9}
+.cm-secondary{
+  background:transparent;border:1px solid var(--ant-color-border);color:var(--ant-color-text-secondary);
+  border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;width:100%;
+}
+.cm-secondary:hover{border-color:#1677ff;color:#1677ff}
+.cm-row{display:flex;gap:8px;margin:10px 0}
+.cm-row .cm-submit,.cm-row .cm-secondary{width:auto;flex:1;margin-bottom:0}
+.cm-steps{padding-left:20px;color:var(--ant-color-text);font-size:14px;line-height:1.9}
+.cm-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;max-height:260px;overflow-y:auto}
+.cm-list-item{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:var(--ant-color-fill-tertiary);border:1px solid var(--ant-color-border);
+  border-radius:8px;padding:10px 12px;cursor:pointer;
+}
+.cm-list-item:hover{border-color:#1677ff}
+.cm-list-item .cli-title{font-weight:700;font-size:13px;color:var(--ant-color-text)}
+.cm-list-item .cli-meta{font-size:11px;color:var(--ant-color-text-tertiary)}
+.cm-code{
+  display:inline-block;font-family:monospace;font-size:18px;font-weight:800;letter-spacing:.05em;
+  background:rgba(22,119,255,.12);color:#1677ff;border-radius:8px;padding:4px 10px;margin:6px 0 12px;
+}
+.cm-readonly-brief{
+  white-space:pre-wrap;font-size:13px;color:var(--ant-color-text-secondary);
+  background:var(--ant-color-fill-tertiary);border-radius:8px;padding:10px 12px;margin-bottom:12px;
+}
+.cm-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+.cm-table th{text-align:left;color:var(--ant-color-text-tertiary);font-weight:700;padding:6px 8px;border-bottom:1px solid var(--ant-color-border)}
+.cm-table td{padding:6px 8px;border-bottom:1px solid var(--ant-color-border);color:var(--ant-color-text)}
+.cm-table button{
+  background:var(--ant-color-fill-tertiary);border:1px solid var(--ant-color-border);border-radius:6px;
+  padding:3px 8px;font-size:11px;cursor:pointer;color:var(--ant-color-text-secondary);margin-right:4px;
+}
+.cm-table button:hover{border-color:#1677ff;color:#1677ff}
+.tm-tabs{display:flex;align-items:center;gap:4px;border-bottom:1px solid var(--ant-color-border);margin-bottom:10px;padding-bottom:8px}
+.tm-tab{
+  background:none;border:none;font-size:12px;font-weight:700;color:var(--ant-color-text-tertiary);
+  cursor:pointer;padding:6px 10px;border-radius:6px;
+}
+.tm-tab.active{color:#1677ff;background:rgba(22,119,255,.1)}
+.tm-logout{
+  margin-left:auto;background:none;border:none;font-size:11px;color:var(--ant-color-text-tertiary);
+  cursor:pointer;padding:6px 8px;
+}
+.tm-logout:hover{color:#ff7875}
+
+/* Botão ⚙️ Desafio — canto inf-esq do stage, acima da régua, alinhado com o botão 3D */
+#btn-brief{
+  display:none;position:absolute;left:14px;bottom:56px;z-index:21;
+  width:40px;height:40px;border-radius:10px;font-size:18px;
+  background:rgba(10,12,20,.65);border:1px solid rgba(255,255,255,.18);
+  color:rgba(255,255,255,.85);cursor:pointer;backdrop-filter:blur(4px);
+  transition:all .15s;
+}
+#btn-brief:hover{border-color:#1677ff;color:#1677ff}
+#btn-brief.show{display:block}
+
+/* Banner de edição do professor / barra de modo de visualização */
+#teacher-edit-banner,#viewer-bar{
+  display:none;position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:210;
+  align-items:center;gap:14px;background:rgba(10,12,20,.85);backdrop-filter:blur(6px);
+  border:1px solid #1677ff;border-radius:100px;padding:8px 10px 8px 18px;
+  font-size:12px;font-weight:600;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.4);
+}
+#teacher-edit-banner.show,#viewer-bar.show{display:flex}
+#teacher-edit-banner button,#viewer-bar button{
+  background:#1677ff;color:#fff;border:none;border-radius:100px;
+  padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;
+}
+#viewer-bar{border-color:#faad14}
+#viewer-bar button{background:#faad14;color:#000}
+
+/* Modo só-visualização: esconde tudo o que permite editar */
+#app.viewer-only #lsb,#app.viewer-only #bot,#app.viewer-only #rsb,
+#app.viewer-only #btn-layers-fixed,
+#app.viewer-only #hdr button,#app.viewer-only #classroom-pill,
+#app.viewer-only #btn-brief{display:none!important}
 .hdr-btn{
   background:transparent;color:var(--ant-color-text-secondary);
   border:1px solid transparent;border-radius:var(--ant-border-radius);
@@ -550,6 +666,13 @@ button{cursor:pointer;border:none;font-family:inherit;background:none}
   <button id="hdr-stl" onclick="downloadSTL()" style="background:#faad14;color:#000;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;opacity:.5" title="Guardar STL">💾 STL</button>
   <button onclick="saveJSON()" style="background:var(--ant-color-fill-secondary);color:var(--ant-color-text-secondary);border:1px solid var(--ant-color-border);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0" title="Guardar JSON">📥 Guardar</button>
   <button onclick="document.getElementById('load-input').click()" style="background:var(--ant-color-fill-secondary);color:var(--ant-color-text-secondary);border:1px solid var(--ant-color-border);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0" title="Carregar JSON">📤 Carregar</button>
+  <span style="color:var(--ant-color-border);font-size:20px;padding:0 2px;flex-shrink:0">|</span>
+  <button id="btn-classroom" onclick="openClassroomModal()" style="background:var(--ant-color-fill-secondary);color:var(--ant-color-text-secondary);border:1px solid var(--ant-color-border);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0" title="Entrar numa sala de aula">🏫 Sala de aula</button>
+  <button id="btn-teacher" onclick="openTeacherModal()" style="background:var(--ant-color-fill-secondary);color:var(--ant-color-text-secondary);border:1px solid var(--ant-color-border);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0" title="Área do professor">👩‍🏫 Professor</button>
+  <div id="classroom-pill" style="display:none;align-items:center;gap:6px;background:rgba(22,119,255,.12);border:1px solid #1677ff;color:#1677ff;border-radius:100px;padding:3px 10px 3px 12px;font-size:12px;font-weight:700;flex-shrink:0">
+    <span id="classroom-pill-txt">🏫</span>
+    <button onclick="leaveClassroom()" title="Sair da sala" style="background:none;border:none;color:#1677ff;cursor:pointer;font-size:13px;font-weight:900;padding:0 2px">✕</button>
+  </div>
   <div id="score-badge">⭐ <span id="score-val">0</span> pts</div>
   <button id="cert-btn" onclick="openCert()">🏆 Certificado</button>
 </div>
@@ -650,16 +773,32 @@ button{cursor:pointer;border:none;font-family:inherit;background:none}
     <div class="vpz-sep"></div>
     <button class="vpz-btn" id="vpz-snap" title="Snap (S)" style="width:auto;padding:0 6px;font-size:11px;font-weight:700;color:#1677ff;border-color:#1677ff">⊞</button>
     <select id="vpz-grid" style="background:transparent;color:var(--ant-color-text-secondary);border:none;font-size:11px;cursor:pointer;outline:none">
-      <option value="10">10px</option>
-      <option value="20" selected>20px</option>
-      <option value="40">40px</option>
-      <option value="80">80px</option>
+      <option value="1" style="color:#000;background:#fff">1px</option>
+      <option value="10" style="color:#000;background:#fff">10px</option>
+      <option value="20" selected style="color:#000;background:#fff">20px</option>
+      <option value="40" style="color:#000;background:#fff">40px</option>
+      <option value="80" style="color:#000;background:#fff">80px</option>
     </select>
   </div>
   <!-- Régua de escala: 10mm a escalar com o zoom -->
   <div id="scale-ruler">
     <div class="ruler-bar" id="ruler-bar"></div>
     <div class="ruler-lbl">10 mm</div>
+  </div>
+
+  <!-- Botão ⚙️ Desafio — só visível numa sessão de sala de aula -->
+  <button id="btn-brief" onclick="openBriefModal()" title="Ver o desafio">⚙️</button>
+
+  <!-- Banner fixo quando o professor está a editar o trabalho de um aluno -->
+  <div id="teacher-edit-banner">
+    <span>✏️ A editar o trabalho de <strong id="teacher-edit-name"></strong> — guarda por cima do original</span>
+    <button onclick="saveTeacherEditAndReturn()">💾 Guardar e voltar ao painel</button>
+  </div>
+
+  <!-- Barra fixa em modo só-visualização (super-admin) -->
+  <div id="viewer-bar">
+    <span>👁️ Modo de visualização — sem edição</span>
+    <button onclick="closeViewerMode()">✕ Fechar</button>
   </div>
 
     <!-- Botão layers fixo (sempre visível) -->
@@ -697,6 +836,92 @@ button{cursor:pointer;border:none;font-family:inherit;background:none}
 </div>
 
 </div><!-- /app -->
+
+<!-- Modal: entrar numa sala de aula (aluno) -->
+<div id="classroom-modal" class="cm-modal" onclick="if(event.target===this)closeClassroomModal()">
+  <div class="cm-inner">
+    <button class="cm-close" onclick="closeClassroomModal()">✕</button>
+    <h3>🏫 Entrar numa sala de aula</h3>
+    <div id="classroom-error" class="cm-error"></div>
+    <label>Código da sala
+      <input id="cm-code" type="text" placeholder="MONC-7F3K" maxlength="12" autocapitalize="characters">
+    </label>
+    <label>O teu nome
+      <input id="cm-name" type="text" placeholder="O teu nome" maxlength="60">
+    </label>
+    <label>Código pessoal (4 números)
+      <input id="cm-pin" type="text" inputmode="numeric" placeholder="1234" maxlength="4">
+    </label>
+    <div class="cm-hint">Usa sempre o mesmo código pessoal para continuares o teu trabalho noutro dia ou computador.</div>
+    <button class="cm-submit" onclick="submitJoinClassroom()">Entrar</button>
+  </div>
+</div>
+
+<!-- Modal: brief do desafio (só leitura, aluno) -->
+<div id="brief-modal" class="cm-modal" onclick="if(event.target===this)closeBriefModal()">
+  <div class="cm-inner">
+    <button class="cm-close" onclick="closeBriefModal()">✕</button>
+    <h3 id="brief-title">Desafio</h3>
+    <ol id="brief-steps" class="cm-steps"></ol>
+  </div>
+</div>
+
+<!-- Modal: área do professor (login/registo + painel) -->
+<div id="teacher-modal" class="cm-modal" onclick="if(event.target===this)closeTeacherModal()">
+  <div class="cm-inner cm-inner-wide">
+    <button class="cm-close" onclick="closeTeacherModal()">✕</button>
+
+    <div id="tm-auth">
+      <h3>👩‍🏫 Área do professor</h3>
+      <div id="tm-auth-error" class="cm-error"></div>
+      <label>Email<input id="tm-email" type="email" autocomplete="username"></label>
+      <label>Password<input id="tm-password" type="password" autocomplete="current-password"></label>
+      <button class="cm-submit" onclick="teacherLogin()">Entrar</button>
+      <button class="cm-secondary" onclick="teacherRegister()">Criar conta</button>
+    </div>
+
+    <div id="tm-dash" style="display:none">
+      <div class="tm-tabs">
+        <button class="tm-tab active" data-tab="mine" onclick="switchTeacherTab('mine')">As minhas atividades</button>
+        <button class="tm-tab" id="tm-tab-all" data-tab="all" onclick="switchTeacherTab('all')" style="display:none">🛡️ Todas as atividades</button>
+        <button class="tm-logout" onclick="teacherLogout()">Sair</button>
+      </div>
+
+      <div id="tm-panel-mine">
+        <div id="tm-new-activity">
+          <h4>+ Nova atividade</h4>
+          <input id="tm-new-title" placeholder="Título (ex: Robot de fantasia)">
+          <textarea id="tm-new-brief" placeholder="Passo a passo — um passo por linha..." rows="4"></textarea>
+          <button class="cm-submit" onclick="createActivity()">Criar atividade</button>
+        </div>
+        <div id="tm-activities-list" class="cm-list"></div>
+      </div>
+
+      <div id="tm-activity-detail" style="display:none">
+        <button class="cm-secondary" onclick="backToActivitiesList()">← Voltar</button>
+        <h4 id="tm-detail-title"></h4>
+        <div class="cm-code" id="tm-detail-code"></div>
+        <textarea id="tm-detail-brief" rows="4"></textarea>
+        <div class="cm-row">
+          <button class="cm-submit" onclick="saveActivityBrief()">Guardar alterações</button>
+          <button class="cm-secondary" onclick="refreshSubmissions()">🔄 Atualizar</button>
+        </div>
+        <table id="tm-submissions-table" class="cm-table"><tbody></tbody></table>
+      </div>
+
+      <div id="tm-panel-all" style="display:none">
+        <div id="tm-all-list" class="cm-list"></div>
+      </div>
+      <div id="tm-all-detail" style="display:none">
+        <button class="cm-secondary" onclick="backToAllList()">← Voltar</button>
+        <h4 id="tm-all-detail-title"></h4>
+        <div class="cm-code" id="tm-all-detail-code"></div>
+        <div id="tm-all-detail-brief" class="cm-readonly-brief"></div>
+        <table id="tm-all-results-table" class="cm-table"><tbody></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Modal de créditos -->
 <div id="credits-modal" onclick="if(event.target===this)this.classList.remove('open')">
@@ -831,6 +1056,16 @@ let shapes     = [];
 let selectedIds= new Set();  // multi-select via lasso
 let nextId     = 1;
 let drag       = null;
+let readOnlyView = false; // modo super-admin: só ver, nunca editar
+
+// ── Sala de aula ─────────────────────────
+// TODO: substituir pelo URL público do serviço da API depois do deploy no Railway.
+const API_BASE = 'https://REPLACE-WITH-YOUR-RAILWAY-URL.up.railway.app';
+let classroomSession  = null; // {submissionId, classroomCode, studentName, briefTitle, brief}
+let teacherAuthToken  = null; // JWT do professor (também persistido em localStorage)
+let teacherEditSession= null; // {submissionId, studentName} — professor a editar o trabalho de um aluno
+let viewerSnapshot    = null; // {shapes,nextId,mode} do professor, antes de abrir "Abrir no Monco" ou o modo de visualização
+let teacherState = { activities:null, currentActivityId:null, allActivities:null, currentAllActivityId:null };
 
 // ── Viewport (zoom + pan) ───────────────
 let vpZoom = 1;
@@ -1567,6 +1802,7 @@ canvas.addEventListener('pointerdown', e=>{
 }));
 
 function onDown(e){
+  if(readOnlyView)return;
   if(mode!=='2d')return;
   // PAN — tratado pelo listener separado, não interferir
   if(activeTool==='pan') return;
@@ -2361,6 +2597,16 @@ function saveJSON(){
   showToast('📥 Guardado como monco.json');
 }
 
+// Aplica {shapes,nextId} ao editor — usado pelo carregar ficheiro, entrar em
+// sala de aula, e o professor a abrir o trabalho de um aluno.
+function applyLoadedShapes(data){
+  shapes=data.shapes.map(s=>({...s,fhPoints:s.fhPoints||undefined}));
+  nextId=data.nextId||(Math.max(0,...shapes.map(s=>s.id))+1);
+  selectedIds.clear();lasso=null;groupXform=null;
+  if(mode==='3d') buildMesh3D(); else redraw();
+  updateAchs();
+}
+
 function loadJSON(e){
   const file=e.target.files[0];if(!file)return;
   const reader=new FileReader();
@@ -2369,11 +2615,7 @@ function loadJSON(e){
       const data=JSON.parse(ev.target.result);
       if(!Array.isArray(data.shapes))throw new Error('Formato inválido');
       pushUndo();
-      shapes=data.shapes.map(s=>({...s,fhPoints:s.fhPoints||undefined}));
-      nextId=data.nextId||(Math.max(0,...shapes.map(s=>s.id))+1);
-      selectedIds.clear();lasso=null;groupXform=null;
-      if(mode==='3d') buildMesh3D(); else redraw();
-      updateAchs();
+      applyLoadedShapes(data);
       doAutosave();
       showToast('📤 Composição carregada — '+shapes.length+' formas');
     }catch(err){showToast('⚠️ Erro: '+err.message);}
@@ -2388,10 +2630,31 @@ function loadJSON(e){
 const AUTOSAVE_KEY='monco3d_autosave_v1';
 let autosaveTimer=null;
 function doAutosave(){
-  try{
-    if(!shapes.length){ localStorage.removeItem(AUTOSAVE_KEY); return; }
-    localStorage.setItem(AUTOSAVE_KEY, JSON.stringify({version:1,ts:Date.now(),nextId,shapes}));
-  }catch(e){ /* localStorage indisponível/cheio — ignorar silenciosamente */ }
+  if(readOnlyView) return; // modo de visualização (super-admin) — nunca gravar o que se está a ver
+  // enquanto edita o trabalho de um aluno, não pisar o rascunho local do professor —
+  // só vai para a API (syncClassroomAutosave), o localStorage fica intacto para o professor recuperar o seu.
+  if(!teacherEditSession){
+    try{
+      if(!shapes.length){ localStorage.removeItem(AUTOSAVE_KEY); }
+      else localStorage.setItem(AUTOSAVE_KEY, JSON.stringify({version:1,ts:Date.now(),nextId,shapes}));
+    }catch(e){ /* localStorage indisponível/cheio — ignorar silenciosamente */ }
+  }
+  syncClassroomAutosave();
+}
+
+// Sincroniza com a API da sala de aula, sempre além do autosave local
+// (que se mantém como rede de segurança). Falhas de rede são silenciosas.
+function syncClassroomAutosave(){
+  if(readOnlyView) return;
+  if(classroomSession){
+    apiFetch('/api/submissions/'+classroomSession.submissionId,{
+      method:'PUT', body:JSON.stringify({shapes_json:{version:1,nextId,shapes}})
+    }).catch(()=>{});
+  } else if(teacherEditSession){
+    apiFetch('/api/teacher/submissions/'+teacherEditSession.submissionId,{
+      method:'PUT', headers:authHeader(), body:JSON.stringify({shapes_json:{version:1,nextId,shapes}})
+    }).catch(()=>{});
+  }
 }
 function scheduleAutosave(){
   clearTimeout(autosaveTimer);
@@ -2415,12 +2678,20 @@ setInterval(doAutosave,5000);
 document.addEventListener('visibilitychange',()=>{ if(document.hidden) doAutosave(); });
 window.addEventListener('beforeunload',doAutosave);
 
-function downloadSTL(){
-  if(!shapes.length){showToast('⚠️ Não há formas para exportar');return;}
+// Gera o STL binário para um array de shapes qualquer (troca temporariamente o
+// `shapes` global, que é o que buildMesh3D() lê, e repõe o estado a seguir).
+// Devolve null se não houver geometria para exportar.
+function shapesToSTLBlob(shapesArr){
+  const prevShapes=shapes, prevNextId=nextId, prevMode=mode;
+  shapes=shapesArr;
   buildMesh3D();
-  if(!mesh3)return;
+  const mesh=mesh3;
+  shapes=prevShapes; nextId=prevNextId;
+  if(prevMode==='3d') buildMesh3D(); else redraw();
+  if(!mesh) return null;
+
   const pos=[];
-  mesh3.traverse(c=>{
+  mesh.traverse(c=>{
     if(!c.isMesh)return;
     const g=c.geometry.clone();
     if(g.index)g.toNonIndexed();
@@ -2428,6 +2699,7 @@ function downloadSTL(){
     for(let i=0;i<p.count;i++)pos.push(p.getX(i),p.getY(i),p.getZ(i));
   });
   const tri=pos.length/9;
+  if(!tri) return null;
   const buf=new ArrayBuffer(84+tri*50);
   const dv=new DataView(buf);
   const hdr='3DMonco';for(let i=0;i<hdr.length;i++)dv.setUint8(i,hdr.charCodeAt(i));
@@ -2441,13 +2713,418 @@ function downloadSTL(){
     [nx/nl,ny/nl,nz/nl,ax,ay,az,bx,by,bz,cx,cy,cz].forEach(v=>{dv.setFloat32(off,v,true);off+=4;});
     dv.setUint16(off,0,true);off+=2;
   }
-  const blob=new Blob([buf],{type:'application/octet-stream'});
+  return new Blob([buf],{type:'application/octet-stream'});
+}
+
+function triggerDownload(blob, filename){
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  const _ts=new Date().toISOString().replace(/[:.]/g,'-').slice(0,19);
-  a.href=url;a.download='monco_'+_ts+'.stl';
+  a.href=url;a.download=filename;
   document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+
+function downloadSTL(){
+  if(!shapes.length){showToast('⚠️ Não há formas para exportar');return;}
+  const blob=shapesToSTLBlob(shapes);
+  if(!blob){showToast('⚠️ Não há formas para exportar');return;}
+  const _ts=new Date().toISOString().replace(/[:.]/g,'-').slice(0,19);
+  triggerDownload(blob, 'monco_'+_ts+'.stl');
   unlockAch('stl');showToast('💾 STL guardado! Abre no Cura para imprimir.');
+}
+
+// ══════════════════════════════════════════════
+// SALA DE AULA
+// ══════════════════════════════════════════════
+async function apiFetch(path, opts={}){
+  const res=await fetch(API_BASE+path,{...opts,headers:{'Content-Type':'application/json',...(opts.headers||{})}});
+  let data=null;
+  try{ data=await res.json(); }catch(e){}
+  if(res.status===401){
+    teacherAuthToken=null;
+    try{ localStorage.removeItem('monco3d_teacher_token_v1'); }catch(e){}
+  }
+  if(!res.ok) throw new Error((data&&data.error)||('Erro '+res.status));
+  return data;
+}
+function authHeader(){ return {'Authorization':'Bearer '+teacherAuthToken}; }
+function safeFilename(name){
+  return String(name).trim().replace(/[^a-z0-9_-]+/gi,'_').slice(0,40) || 'aluno';
+}
+function decodeJWT(token){
+  try{ return JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))); }
+  catch(e){ return null; }
+}
+function teacherIsSuperadmin(){
+  const payload=teacherAuthToken&&decodeJWT(teacherAuthToken);
+  return !!(payload&&payload.isSuperadmin);
+}
+
+// ── Aluno: entrar / sair da sala ─────────────────────────
+const CLASSROOM_CREDS_KEY='monco3d_classroom_creds_v1';
+
+function openClassroomModal(){
+  const urlCode=new URLSearchParams(location.search).get('code');
+  if(urlCode) document.getElementById('cm-code').value=urlCode.toUpperCase();
+  document.getElementById('classroom-error').classList.remove('show');
+  document.getElementById('classroom-modal').classList.add('open');
+}
+function closeClassroomModal(){ document.getElementById('classroom-modal').classList.remove('open'); }
+
+async function submitJoinClassroom(){
+  const creds={
+    classroom_code: document.getElementById('cm-code').value,
+    student_name:   document.getElementById('cm-name').value,
+    student_pin:    document.getElementById('cm-pin').value
+  };
+  const errEl=document.getElementById('classroom-error');
+  errEl.classList.remove('show');
+  try{
+    const data=await apiFetch('/api/submissions/join',{method:'POST',body:JSON.stringify(creds)});
+    applyClassroomJoin(creds, data);
+    try{ localStorage.setItem(CLASSROOM_CREDS_KEY, JSON.stringify(creds)); }catch(e){}
+    pushUndo();
+    applyLoadedShapes(data.shapes_json);
+    closeClassroomModal();
+    showToast('🏫 Entraste em '+classroomSession.classroomCode+'!');
+  }catch(err){
+    errEl.textContent='⚠️ '+err.message; errEl.classList.add('show');
+  }
+}
+
+function applyClassroomJoin(creds, data){
+  classroomSession={
+    submissionId: data.submission_id,
+    classroomCode: String(creds.classroom_code).trim().toUpperCase(),
+    studentName: String(creds.student_name).trim(),
+    briefTitle: data.activity.title,
+    brief: data.activity.brief
+  };
+  renderClassroomPill();
+}
+
+function renderClassroomPill(){
+  const pill=document.getElementById('classroom-pill');
+  const txt=document.getElementById('classroom-pill-txt');
+  const brief=document.getElementById('btn-brief');
+  if(classroomSession){
+    pill.style.display='flex';
+    txt.textContent='🏫 '+classroomSession.classroomCode+' · '+classroomSession.studentName;
+    brief.classList.add('show');
+  }else{
+    pill.style.display='none';
+    brief.classList.remove('show');
+  }
+}
+
+function leaveClassroom(){
+  if(!confirm('Sair da sala de aula? O teu trabalho já está guardado, podes voltar a entrar com o mesmo código e nome.'))return;
+  try{ localStorage.removeItem(CLASSROOM_CREDS_KEY); }catch(e){}
+  const url=new URL(location.href); url.searchParams.delete('code');
+  location.href=url.toString();
+}
+
+// Tenta retomar uma sessão de sala de aula guardada neste dispositivo. Devolve true se o conseguiu.
+async function tryResumeClassroomSession(){
+  let creds=null;
+  try{ creds=JSON.parse(localStorage.getItem(CLASSROOM_CREDS_KEY)||'null'); }catch(e){}
+  if(!creds||!creds.classroom_code) return false;
+  try{
+    const data=await apiFetch('/api/submissions/join',{method:'POST',body:JSON.stringify(creds)});
+    applyClassroomJoin(creds, data);
+    applyLoadedShapes(data.shapes_json);
+    return true;
+  }catch(err){ return false; }
+}
+
+// ── Aluno: modal do desafio (⚙️) ─────────────────────────
+function openBriefModal(){
+  if(!classroomSession) return;
+  document.getElementById('brief-title').textContent=classroomSession.briefTitle||'Desafio';
+  const ol=document.getElementById('brief-steps');
+  ol.innerHTML='';
+  String(classroomSession.brief||'').split('\n').map(s=>s.trim()).filter(Boolean).forEach(step=>{
+    const li=document.createElement('li'); li.textContent=step; ol.appendChild(li);
+  });
+  if(!ol.children.length){
+    const li=document.createElement('li'); li.textContent='(o professor ainda não escreveu o passo-a-passo)'; ol.appendChild(li);
+  }
+  document.getElementById('brief-modal').classList.add('open');
+}
+function closeBriefModal(){ document.getElementById('brief-modal').classList.remove('open'); }
+
+// ── Professor: autenticação ─────────────────────────
+function openTeacherModal(){
+  document.getElementById('teacher-modal').classList.add('open');
+  if(teacherAuthToken) showTeacherDash(); else showTeacherAuth();
+}
+function closeTeacherModal(){ document.getElementById('teacher-modal').classList.remove('open'); }
+function showTeacherAuth(){
+  document.getElementById('tm-auth').style.display='block';
+  document.getElementById('tm-dash').style.display='none';
+}
+function showTeacherDash(){
+  document.getElementById('tm-auth').style.display='none';
+  document.getElementById('tm-dash').style.display='block';
+  document.getElementById('tm-tab-all').style.display=teacherIsSuperadmin()?'inline-block':'none';
+  switchTeacherTab('mine');
+}
+function setTeacherToken(token){
+  teacherAuthToken=token;
+  try{ localStorage.setItem('monco3d_teacher_token_v1', token); }catch(e){}
+}
+function teacherLogout(){
+  teacherAuthToken=null;
+  try{ localStorage.removeItem('monco3d_teacher_token_v1'); }catch(e){}
+  showTeacherAuth();
+}
+async function teacherLogin(){
+  const email=document.getElementById('tm-email').value;
+  const password=document.getElementById('tm-password').value;
+  const errEl=document.getElementById('tm-auth-error');
+  errEl.classList.remove('show');
+  try{
+    const data=await apiFetch('/api/auth/login',{method:'POST',body:JSON.stringify({email,password})});
+    setTeacherToken(data.token);
+    showTeacherDash();
+  }catch(err){ errEl.textContent='⚠️ '+err.message; errEl.classList.add('show'); }
+}
+async function teacherRegister(){
+  const email=document.getElementById('tm-email').value;
+  const password=document.getElementById('tm-password').value;
+  const errEl=document.getElementById('tm-auth-error');
+  errEl.classList.remove('show');
+  try{
+    const data=await apiFetch('/api/auth/register',{method:'POST',body:JSON.stringify({email,password})});
+    setTeacherToken(data.token);
+    showTeacherDash();
+  }catch(err){ errEl.textContent='⚠️ '+err.message; errEl.classList.add('show'); }
+}
+
+// ── Professor: separadores ─────────────────────────
+function switchTeacherTab(tab){
+  document.querySelectorAll('.tm-tab').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+  document.getElementById('tm-panel-mine').style.display=tab==='mine'?'block':'none';
+  document.getElementById('tm-panel-all').style.display=tab==='all'?'block':'none';
+  document.getElementById('tm-activity-detail').style.display='none';
+  document.getElementById('tm-all-detail').style.display='none';
+  if(tab==='mine'){ document.getElementById('tm-new-activity').style.display='block'; document.getElementById('tm-activities-list').style.display='flex'; loadTeacherActivities(); }
+  if(tab==='all') loadAllActivities();
+}
+
+// ── Professor: as minhas atividades ─────────────────────────
+async function loadTeacherActivities(){
+  try{
+    teacherState.activities=await apiFetch('/api/activities',{headers:authHeader()});
+    renderTeacherActivitiesList();
+  }catch(err){ showToast('⚠️ '+err.message); }
+}
+function renderTeacherActivitiesList(){
+  const list=document.getElementById('tm-activities-list');
+  list.innerHTML='';
+  (teacherState.activities||[]).forEach(act=>{
+    const div=document.createElement('div'); div.className='cm-list-item';
+    div.onclick=()=>openActivityDetail(act.id);
+    const left=document.createElement('div');
+    const title=document.createElement('div'); title.className='cli-title'; title.textContent=act.title;
+    const meta=document.createElement('div'); meta.className='cli-meta';
+    meta.textContent=act.classroom_code+' · '+act.submission_count+' entregas';
+    left.append(title,meta);
+    const arrow=document.createElement('div'); arrow.textContent='›';
+    div.append(left,arrow);
+    list.appendChild(div);
+  });
+  if(!(teacherState.activities||[]).length){
+    const hint=document.createElement('div'); hint.className='cm-hint'; hint.textContent='Ainda não criaste nenhuma atividade.';
+    list.appendChild(hint);
+  }
+}
+async function createActivity(){
+  const title=document.getElementById('tm-new-title').value;
+  const brief=document.getElementById('tm-new-brief').value;
+  if(!title.trim()){ showToast('⚠️ Dá um título à atividade'); return; }
+  try{
+    await apiFetch('/api/activities',{method:'POST',headers:authHeader(),body:JSON.stringify({title,brief})});
+    document.getElementById('tm-new-title').value='';
+    document.getElementById('tm-new-brief').value='';
+    loadTeacherActivities();
+    showToast('🏫 Atividade criada!');
+  }catch(err){ showToast('⚠️ '+err.message); }
+}
+function backToActivitiesList(){
+  teacherState.currentActivityId=null;
+  document.getElementById('tm-activity-detail').style.display='none';
+  document.getElementById('tm-new-activity').style.display='block';
+  document.getElementById('tm-activities-list').style.display='flex';
+}
+async function openActivityDetail(id){
+  const act=(teacherState.activities||[]).find(a=>a.id===id);
+  if(!act) return;
+  teacherState.currentActivityId=id;
+  document.getElementById('tm-new-activity').style.display='none';
+  document.getElementById('tm-activities-list').style.display='none';
+  document.getElementById('tm-activity-detail').style.display='block';
+  document.getElementById('tm-detail-title').textContent=act.title;
+  document.getElementById('tm-detail-code').textContent=act.classroom_code;
+  document.getElementById('tm-detail-brief').value=act.brief;
+  await refreshSubmissions();
+}
+async function saveActivityBrief(){
+  const id=teacherState.currentActivityId; if(!id) return;
+  const brief=document.getElementById('tm-detail-brief').value;
+  try{
+    await apiFetch('/api/activities/'+id,{method:'PATCH',headers:authHeader(),body:JSON.stringify({brief})});
+    showToast('💾 Brief atualizado');
+  }catch(err){ showToast('⚠️ '+err.message); }
+}
+async function refreshSubmissions(){
+  const id=teacherState.currentActivityId; if(!id) return;
+  try{
+    const subs=await apiFetch('/api/activities/'+id+'/submissions',{headers:authHeader()});
+    const tbody=document.querySelector('#tm-submissions-table tbody');
+    tbody.innerHTML='';
+    if(!subs.length){
+      const tr=document.createElement('tr'); const td=document.createElement('td');
+      td.colSpan=3; td.textContent='Ainda sem entregas.'; tr.appendChild(td); tbody.appendChild(tr);
+    }
+    subs.forEach(s=>{
+      const tr=document.createElement('tr');
+      const tdName=document.createElement('td'); tdName.textContent=s.student_name;
+      const tdDate=document.createElement('td'); tdDate.textContent=new Date(s.updated_at).toLocaleString('pt-PT');
+      const tdActions=document.createElement('td');
+      const btnStl=document.createElement('button'); btnStl.textContent='💾 STL'; btnStl.onclick=()=>downloadSubmissionStl(s.id,s.student_name);
+      const btnJson=document.createElement('button'); btnJson.textContent='📥 JSON'; btnJson.onclick=()=>downloadSubmissionJson(s.id,s.student_name);
+      const btnOpen=document.createElement('button'); btnOpen.textContent='✏️ Abrir'; btnOpen.onclick=()=>openSubmissionInMonco(s.id,s.student_name);
+      tdActions.append(btnStl,btnJson,btnOpen);
+      tr.append(tdName,tdDate,tdActions);
+      tbody.appendChild(tr);
+    });
+  }catch(err){ showToast('⚠️ '+err.message); }
+}
+async function downloadSubmissionStl(id, studentName){
+  try{
+    const sub=await apiFetch('/api/teacher/submissions/'+id,{headers:authHeader()});
+    const blob=shapesToSTLBlob(sub.shapes_json.shapes||[]);
+    if(!blob){ showToast('⚠️ Este trabalho ainda não tem formas.'); return; }
+    triggerDownload(blob, safeFilename(studentName)+'.stl');
+  }catch(err){ showToast('⚠️ '+err.message); }
+}
+async function downloadSubmissionJson(id, studentName){
+  try{
+    const sub=await apiFetch('/api/teacher/submissions/'+id,{headers:authHeader()});
+    const blob=new Blob([JSON.stringify(sub.shapes_json,null,2)],{type:'application/json'});
+    triggerDownload(blob, safeFilename(studentName)+'.json');
+  }catch(err){ showToast('⚠️ '+err.message); }
+}
+async function openSubmissionInMonco(id, studentName){
+  try{
+    const sub=await apiFetch('/api/teacher/submissions/'+id,{headers:authHeader()});
+    viewerSnapshot={shapes,nextId,mode};
+    teacherEditSession={submissionId:id, studentName};
+    closeTeacherModal();
+    pushUndo();
+    applyLoadedShapes(sub.shapes_json);
+    document.getElementById('teacher-edit-name').textContent=studentName;
+    document.getElementById('teacher-edit-banner').classList.add('show');
+    showToast('✏️ A editar o trabalho de '+studentName);
+  }catch(err){ showToast('⚠️ '+err.message); }
+}
+async function saveTeacherEditAndReturn(){
+  if(!teacherEditSession) return;
+  try{
+    await apiFetch('/api/teacher/submissions/'+teacherEditSession.submissionId,{
+      method:'PUT', headers:authHeader(), body:JSON.stringify({shapes_json:{version:1,nextId,shapes}})
+    });
+    showToast('💾 Trabalho do aluno atualizado');
+  }catch(err){ showToast('⚠️ '+err.message); }
+  const snap=viewerSnapshot, activityId=teacherState.currentActivityId;
+  teacherEditSession=null; viewerSnapshot=null;
+  document.getElementById('teacher-edit-banner').classList.remove('show');
+  if(snap){ shapes=snap.shapes; nextId=snap.nextId; if(snap.mode==='3d') buildMesh3D(); else redraw(); }
+  openTeacherModal();
+  if(activityId) openActivityDetail(activityId);
+}
+
+// ── Professor (super-admin): todas as atividades, anonimizado ─────────────────────────
+async function loadAllActivities(){
+  try{
+    teacherState.allActivities=await apiFetch('/api/superadmin/activities',{headers:authHeader()});
+    renderAllActivitiesList();
+  }catch(err){ showToast('⚠️ '+err.message); }
+}
+function renderAllActivitiesList(){
+  const list=document.getElementById('tm-all-list');
+  list.innerHTML='';
+  (teacherState.allActivities||[]).forEach(act=>{
+    const div=document.createElement('div'); div.className='cm-list-item';
+    div.onclick=()=>openAllActivityDetail(act.id);
+    const left=document.createElement('div');
+    const title=document.createElement('div'); title.className='cli-title'; title.textContent=act.title;
+    const meta=document.createElement('div'); meta.className='cli-meta';
+    meta.textContent=act.classroom_code+' · '+act.submission_count+' entregas · '+new Date(act.created_at).toLocaleDateString('pt-PT');
+    left.append(title,meta);
+    const arrow=document.createElement('div'); arrow.textContent='›';
+    div.append(left,arrow);
+    list.appendChild(div);
+  });
+  if(!(teacherState.allActivities||[]).length){
+    const hint=document.createElement('div'); hint.className='cm-hint'; hint.textContent='Ainda não há atividades criadas por nenhum professor.';
+    list.appendChild(hint);
+  }
+}
+function backToAllList(){
+  teacherState.currentAllActivityId=null;
+  document.getElementById('tm-all-detail').style.display='none';
+  document.getElementById('tm-panel-all').style.display='block';
+}
+async function openAllActivityDetail(id){
+  try{
+    const detail=await apiFetch('/api/superadmin/activities/'+id,{headers:authHeader()});
+    teacherState.currentAllActivityId=id;
+    document.getElementById('tm-panel-all').style.display='none';
+    document.getElementById('tm-all-detail').style.display='block';
+    document.getElementById('tm-all-detail-title').textContent=detail.title;
+    document.getElementById('tm-all-detail-code').textContent=detail.classroom_code;
+    document.getElementById('tm-all-detail-brief').textContent=detail.brief||'(sem brief)';
+    const tbody=document.querySelector('#tm-all-results-table tbody');
+    tbody.innerHTML='';
+    if(!detail.submissions.length){
+      const tr=document.createElement('tr'); const td=document.createElement('td');
+      td.colSpan=3; td.textContent='Ainda sem resultados.'; tr.appendChild(td); tbody.appendChild(tr);
+    }
+    detail.submissions.forEach(s=>{
+      const tr=document.createElement('tr');
+      const tdLabel=document.createElement('td'); tdLabel.textContent=s.label;
+      const tdDate=document.createElement('td'); tdDate.textContent=new Date(s.updated_at).toLocaleString('pt-PT');
+      const tdActions=document.createElement('td');
+      const btn=document.createElement('button'); btn.textContent='👁️ Ver'; btn.onclick=()=>viewAnonymousResult(s.id);
+      tdActions.appendChild(btn);
+      tr.append(tdLabel,tdDate,tdActions);
+      tbody.appendChild(tr);
+    });
+  }catch(err){ showToast('⚠️ '+err.message); }
+}
+async function viewAnonymousResult(id){
+  try{
+    const data=await apiFetch('/api/superadmin/submissions/'+id,{headers:authHeader()});
+    viewerSnapshot={shapes,nextId,mode};
+    closeTeacherModal();
+    readOnlyView=true;
+    document.getElementById('app').classList.add('viewer-only');
+    applyLoadedShapes(data.shapes_json);
+    setMode('3d');
+    document.getElementById('viewer-bar').classList.add('show');
+  }catch(err){ showToast('⚠️ '+err.message); }
+}
+function closeViewerMode(){
+  readOnlyView=false;
+  document.getElementById('app').classList.remove('viewer-only');
+  document.getElementById('viewer-bar').classList.remove('show');
+  const snap=viewerSnapshot, activityId=teacherState.currentAllActivityId;
+  viewerSnapshot=null;
+  if(snap){ shapes=snap.shapes; nextId=snap.nextId; if(snap.mode==='3d') buildMesh3D(); else redraw(); }
+  openTeacherModal();
+  switchTeacherTab('all');
+  if(activityId) openAllActivityDetail(activityId);
 }
 
 // ═══════════════════════════════════════
@@ -2812,8 +3489,18 @@ function toggleLayers(){
 })();
 
 // ── Init ─────────────────────────────────
-// Recuperar sessão não guardada (autosave) ou carregar o Monco (logo/mascote) ao arrancar
-(function loadMonco(){
+// Restaurar sessão do professor (se tiver feito login antes) neste dispositivo
+try{ teacherAuthToken=localStorage.getItem('monco3d_teacher_token_v1')||null; }catch(e){}
+
+// Recuperar sessão de sala de aula, sessão não guardada (autosave), ou carregar o Monco (logo/mascote) ao arrancar
+(async function loadMonco(){
+  if(await tryResumeClassroomSession()){
+    setTimeout(()=>{ fitAll(); redraw(); updateAchs(); },120);
+    return;
+  }
+  const urlCode=new URLSearchParams(location.search).get('code');
+  if(urlCode) setTimeout(openClassroomModal, 300);
+
   const auto=readAutosave();
   if(auto){
     const when=new Date(auto.ts).toLocaleString('pt-PT');

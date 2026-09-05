@@ -1,0 +1,22 @@
+{
+  "name": "monco3d-classroom-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API do modo Sala de Aula do 3D Monco (auth de professor, atividades, submissões dos alunos)",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.12.0"
+  }
+}
