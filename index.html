@@ -773,7 +773,7 @@ button{cursor:pointer;border:none;font-family:inherit;background:none}
     <div class="vpz-sep"></div>
     <button class="vpz-btn" id="vpz-snap" title="Snap (S)" style="width:auto;padding:0 6px;font-size:11px;font-weight:700;color:#1677ff;border-color:#1677ff">⊞</button>
     <select id="vpz-grid" style="background:transparent;color:var(--ant-color-text-secondary);border:none;font-size:11px;cursor:pointer;outline:none">
-      <option value="1" style="color:#000;background:#fff">1px</option>
+      <option value="off" style="color:#000;background:#fff">Off</option>
       <option value="10" style="color:#000;background:#fff">10px</option>
       <option value="20" selected style="color:#000;background:#fff">20px</option>
       <option value="40" style="color:#000;background:#fff">40px</option>
@@ -3357,15 +3357,18 @@ function initVpBar(){
   if(zi) zi.onclick=()=>doZoom(1.25);
   if(zf) zf.onclick=()=>{fitAll();updZoom();};
   if(z1) z1.onclick=()=>{resetView();updZoom();};
-  if(zsn) zsn.onclick=()=>{
-    snapOn=!snapOn;
-    zsn.style.color=snapOn?'#1677ff':'';
-    zsn.style.borderColor=snapOn?'#1677ff':'';
+  function setSnapUI(on){
+    snapOn=on;
+    if(zsn){ zsn.style.color=on?'#1677ff':''; zsn.style.borderColor=on?'#1677ff':''; }
     const bs=document.getElementById('btn-snap');
-    if(bs) bs.classList.toggle('active',snapOn);
+    if(bs) bs.classList.toggle('active',on);
+  }
+  if(zsn) zsn.onclick=()=>{ setSnapUI(!snapOn); redraw(); };
+  if(zgr) zgr.onchange=()=>{
+    if(zgr.value==='off'){ setSnapUI(false); }
+    else{ snapSize=parseInt(zgr.value); setSnapUI(true); }
     redraw();
   };
-  if(zgr) zgr.onchange=()=>{snapSize=parseInt(zgr.value);redraw();};
   // hdr STL button disabled state
   function updStl(){
     const hs=document.getElementById('hdr-stl');
