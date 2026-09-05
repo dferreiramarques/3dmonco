@@ -900,7 +900,10 @@ button{cursor:pointer;border:none;font-family:inherit;background:none}
       <div id="tm-activity-detail" style="display:none">
         <button class="cm-secondary" onclick="backToActivitiesList()">← Voltar</button>
         <h4 id="tm-detail-title"></h4>
-        <div class="cm-code" id="tm-detail-code"></div>
+        <div class="cm-row" style="align-items:center;margin:6px 0 12px">
+          <div class="cm-code" id="tm-detail-code" style="margin:0"></div>
+          <button class="cm-secondary" style="width:auto;flex:none" onclick="copyClassroomLink()">🔗 Copiar link para os alunos</button>
+        </div>
         <textarea id="tm-detail-brief" rows="4"></textarea>
         <div class="cm-row">
           <button class="cm-submit" onclick="saveActivityBrief()">Guardar alterações</button>
@@ -1308,11 +1311,19 @@ function updateHoleBadge(){
     activeColor===HOLE_COLOR?'block':'none';
 }
 
+// Verdadeiro quando o utilizador está a escrever num campo de texto (input,
+// textarea, contenteditable) — os atalhos do editor não se devem aplicar aí.
+function isTypingTarget(e){
+  const t=e.target;
+  return !!(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable));
+}
+
 // Keyboard shortcuts
 window.addEventListener('keydown',e=>{
+  if(isTypingTarget(e))return;
   if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undo();}
   if((e.ctrlKey||e.metaKey)&&(e.key==='y'||(e.shiftKey&&e.key==='z'))){e.preventDefault();redo();}
-  if(e.key==='s'&&!e.ctrlKey&&!e.metaKey&&document.activeElement.tagName!=='INPUT'){
+  if(e.key==='s'&&!e.ctrlKey&&!e.metaKey){
     snapOn=!snapOn;
     const btn=document.getElementById('btn-snap');
     if(btn)btn.classList.toggle('active',snapOn);
@@ -1781,7 +1792,7 @@ canvas.addEventListener('wheel', e=>{
 },{passive:false});
 
 // ── Pan com space+drag ou botão do meio ──────────────────────────
-window.addEventListener('keydown', e=>{ if(e.code==='Space'&&mode==='2d'){e.preventDefault();spaceDown=true;canvas.style.cursor='grab';}});
+window.addEventListener('keydown', e=>{ if(e.code==='Space'&&mode==='2d'&&!isTypingTarget(e)){e.preventDefault();spaceDown=true;canvas.style.cursor='grab';}});
 window.addEventListener('keyup',   e=>{ if(e.code==='Space'){spaceDown=false;canvas.style.cursor=activeTool==='erase'?'crosshair':'default';}});
 
 canvas.addEventListener('pointerdown', e=>{
@@ -2974,6 +2985,22 @@ async function saveActivityBrief(){
     await apiFetch('/api/activities/'+id,{method:'PATCH',headers:authHeader(),body:JSON.stringify({brief})});
     showToast('💾 Brief atualizado');
   }catch(err){ showToast('⚠️ '+err.message); }
+}
+async function copyClassroomLink(){
+  const id=teacherState.currentActivityId;
+  const act=(teacherState.activities||[]).find(a=>a.id===id);
+  if(!act) return;
+  const link=location.origin+location.pathname+'?code='+encodeURIComponent(act.classroom_code);
+  try{
+    await navigator.clipboard.writeText(link);
+    showToast('🔗 Link copiado! Cola-o num chat ou email para os alunos.');
+    return;
+  }catch(err){ /* clipboard indisponível — tenta mostrar o link para copiar à mão */ }
+  try{
+    prompt('Copia este link para partilhares com os alunos:', link);
+  }catch(err){
+    showToast('🔗 Link para partilhar: '+link);
+  }
 }
 async function refreshSubmissions(){
   const id=teacherState.currentActivityId; if(!id) return;
