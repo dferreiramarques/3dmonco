@@ -884,6 +884,7 @@ button{cursor:pointer;border:none;font-family:inherit;background:none}
       <div class="tm-tabs">
         <button class="tm-tab active" data-tab="mine" onclick="switchTeacherTab('mine')">As minhas atividades</button>
         <button class="tm-tab" id="tm-tab-all" data-tab="all" onclick="switchTeacherTab('all')" style="display:none">🛡️ Todas as atividades</button>
+        <span id="tm-teacher-email" style="margin-left:auto;font-size:11px;color:var(--ant-color-text-tertiary)"></span>
         <button class="tm-logout" onclick="teacherLogout()">Sair</button>
       </div>
 
@@ -898,7 +899,10 @@ button{cursor:pointer;border:none;font-family:inherit;background:none}
       </div>
 
       <div id="tm-activity-detail" style="display:none">
-        <button class="cm-secondary" onclick="backToActivitiesList()">← Voltar</button>
+        <div class="cm-row">
+          <button class="cm-secondary" onclick="backToActivitiesList()">← Voltar</button>
+          <button class="cm-secondary" style="color:#ff7875;border-color:#ff7875" onclick="deleteActivity()">🗑️ Apagar atividade</button>
+        </div>
         <h4 id="tm-detail-title"></h4>
         <div class="cm-row" style="align-items:center;margin:6px 0 12px">
           <div class="cm-code" id="tm-detail-code" style="margin:0"></div>
@@ -2876,6 +2880,8 @@ function showTeacherDash(){
   document.getElementById('tm-auth').style.display='none';
   document.getElementById('tm-dash').style.display='block';
   document.getElementById('tm-tab-all').style.display=teacherIsSuperadmin()?'inline-block':'none';
+  const payload=teacherAuthToken&&decodeJWT(teacherAuthToken);
+  document.getElementById('tm-teacher-email').textContent=(payload&&payload.email)||'';
   switchTeacherTab('mine');
 }
 function setTeacherToken(token){
@@ -2984,6 +2990,18 @@ async function saveActivityBrief(){
   try{
     await apiFetch('/api/activities/'+id,{method:'PATCH',headers:authHeader(),body:JSON.stringify({brief})});
     showToast('💾 Brief atualizado');
+  }catch(err){ showToast('⚠️ '+err.message); }
+}
+async function deleteActivity(){
+  const id=teacherState.currentActivityId; if(!id) return;
+  const act=(teacherState.activities||[]).find(a=>a.id===id);
+  const label=act?('"'+act.title+'" ('+act.classroom_code+')'):'esta atividade';
+  if(!confirm('Apagar '+label+'? Isto apaga também todos os trabalhos dos alunos entregues nesta atividade. Não é possível desfazer.')) return;
+  try{
+    await apiFetch('/api/activities/'+id,{method:'DELETE',headers:authHeader()});
+    showToast('🗑️ Atividade apagada');
+    backToActivitiesList();
+    loadTeacherActivities();
   }catch(err){ showToast('⚠️ '+err.message); }
 }
 async function copyClassroomLink(){

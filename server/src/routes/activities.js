@@ -62,6 +62,15 @@ router.patch('/:id', requireTeacher, asyncHandler(async (req, res) => {
   res.json(rows[0]);
 }));
 
+router.delete('/:id', requireTeacher, asyncHandler(async (req, res) => {
+  const { rowCount } = await pool.query(
+    'DELETE FROM activities WHERE id=$1 AND teacher_id=$2',
+    [req.params.id, req.teacher.teacherId]
+  );
+  if (!rowCount) return res.status(404).json({ error: 'Atividade não encontrada.' });
+  res.json({ ok: true });
+}));
+
 // Público — usado pelo aluno para ver o brief no botão ⚙️
 router.get('/by-code/:code', asyncHandler(async (req, res) => {
   const code = normalizeCode(req.params.code);

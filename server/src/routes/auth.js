@@ -13,7 +13,7 @@ function isValidEmail(email) {
 
 function signToken(teacher) {
   return jwt.sign(
-    { teacherId: teacher.id, isSuperadmin: teacher.is_superadmin },
+    { teacherId: teacher.id, isSuperadmin: teacher.is_superadmin, email: teacher.email },
     process.env.JWT_SECRET,
     { expiresIn: '30d' }
   );
