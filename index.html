@@ -1059,8 +1059,7 @@ let drag       = null;
 let readOnlyView = false; // modo super-admin: só ver, nunca editar
 
 // ── Sala de aula ─────────────────────────
-// TODO: substituir pelo URL público do serviço da API depois do deploy no Railway.
-const API_BASE = 'https://REPLACE-WITH-YOUR-RAILWAY-URL.up.railway.app';
+const API_BASE = 'https://3dmonco-api-production.up.railway.app';
 let classroomSession  = null; // {submissionId, classroomCode, studentName, briefTitle, brief}
 let teacherAuthToken  = null; // JWT do professor (também persistido em localStorage)
 let teacherEditSession= null; // {submissionId, studentName} — professor a editar o trabalho de um aluno
