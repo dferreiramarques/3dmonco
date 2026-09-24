@@ -650,6 +650,36 @@ button{cursor:pointer;border:none;font-family:inherit;background:none}
   border-radius:var(--ant-border-radius);padding:8px 12px;
   font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:inherit}
 /* print removido — usar exportCert() */
+
+/* ── TUTORIAL (tour guiado) ─────────────────────────────────────── */
+#tour{position:fixed;inset:0;z-index:3000;display:none}
+#tour.open{display:block}
+#tour-block{position:absolute;inset:0}
+#tour-hole{position:absolute;border-radius:10px;pointer-events:none;
+  box-shadow:0 0 0 9999px rgba(0,0,0,.7),0 0 0 3px #faad14 inset;
+  transition:all .3s ease}
+#tour-hole.center{box-shadow:0 0 0 9999px rgba(0,0,0,.7)}
+#tour-card{position:absolute;width:340px;max-width:calc(100vw - 32px);
+  background:var(--ant-color-bg-elevated);color:var(--ant-color-text);
+  border:1px solid var(--ant-color-border);border-radius:14px;
+  box-shadow:0 12px 40px rgba(0,0,0,.5);padding:18px 18px 14px;
+  transition:top .3s ease,left .3s ease}
+#tour-card .t-emoji{font-size:34px;line-height:1;margin-bottom:6px}
+#tour-card h3{margin:0 0 8px;font-size:18px;color:#faad14}
+#tour-card .t-body{font-size:14px;line-height:1.5;color:var(--ant-color-text-secondary)}
+#tour-card .t-body b{color:var(--ant-color-text)}
+#tour-card .t-body kbd{background:var(--ant-color-fill-secondary);border:1px solid var(--ant-color-border);
+  border-radius:4px;padding:0 5px;font-size:12px;font-family:inherit}
+#tour-card .t-foot{display:flex;align-items:center;gap:8px;margin-top:14px}
+#tour-dots{display:flex;gap:4px;flex:1;flex-wrap:wrap}
+#tour-dots i{width:7px;height:7px;border-radius:50%;background:var(--ant-color-fill)}
+#tour-dots i.on{background:#faad14}
+#tour-card button{border-radius:6px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid var(--ant-color-border)}
+#tour-prev{background:var(--ant-color-fill-secondary);color:var(--ant-color-text-secondary)}
+#tour-next{background:#1677ff;color:#fff;border-color:#1677ff !important}
+#tour-skip{position:absolute;top:10px;right:12px;background:none !important;border:none !important;
+  color:var(--ant-color-text-tertiary);font-weight:600 !important;padding:2px 4px !important}
+#tour-skip:hover{color:var(--ant-color-text)}
 </style>
 </head>
 <body>
@@ -664,7 +694,7 @@ button{cursor:pointer;border:none;font-family:inherit;background:none}
 
   <span style="color:var(--ant-color-border);font-size:20px;padding:0 2px;flex-shrink:0">|</span>
   <button id="hdr-stl" onclick="downloadSTL()" style="background:#faad14;color:#000;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;opacity:.5" title="Guardar STL">💾 STL</button>
-  <button onclick="saveJSON()" style="background:var(--ant-color-fill-secondary);color:var(--ant-color-text-secondary);border:1px solid var(--ant-color-border);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0" title="Guardar JSON">📥 Guardar</button>
+  <button id="hdr-save" onclick="saveJSON()" style="background:var(--ant-color-fill-secondary);color:var(--ant-color-text-secondary);border:1px solid var(--ant-color-border);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0" title="Guardar JSON">📥 Guardar</button>
   <button onclick="document.getElementById('load-input').click()" style="background:var(--ant-color-fill-secondary);color:var(--ant-color-text-secondary);border:1px solid var(--ant-color-border);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0" title="Carregar JSON">📤 Carregar</button>
   <span style="color:var(--ant-color-border);font-size:20px;padding:0 2px;flex-shrink:0">|</span>
   <button id="btn-classroom" onclick="openClassroomModal()" style="background:var(--ant-color-fill-secondary);color:var(--ant-color-text-secondary);border:1px solid var(--ant-color-border);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0" title="Entrar numa sala de aula">🏫 Sala de aula</button>
@@ -673,6 +703,7 @@ button{cursor:pointer;border:none;font-family:inherit;background:none}
     <span id="classroom-pill-txt">🏫</span>
     <button onclick="leaveClassroom()" title="Sair da sala" style="background:none;border:none;color:#1677ff;cursor:pointer;font-size:13px;font-weight:900;padding:0 2px">✕</button>
   </div>
+  <button id="btn-help" onclick="startTour()" style="background:var(--ant-color-fill-secondary);color:var(--ant-color-text-secondary);border:1px solid var(--ant-color-border);border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0" title="Ver o tutorial">❓ Ajuda</button>
   <div id="score-badge">⭐ <span id="score-val">0</span> pts</div>
   <button id="cert-btn" onclick="openCert()">🏆 Certificado</button>
 </div>
@@ -944,12 +975,30 @@ button{cursor:pointer;border:none;font-family:inherit;background:none}
       ✏️ Criado por <strong>David Marques</strong><br>
       <span style="font-size:12px;opacity:.6"></span>
     </div>
+    <button class="kofi-btn" style="background:#1677ff;color:#fff;border:none;cursor:pointer;margin-bottom:8px" onclick="document.getElementById('credits-modal').classList.remove('open');startTour()">❓ Ver tutorial</button>
     <a class="kofi-btn" href="https://ko-fi.com/dferreiramarques" target="_blank" rel="noopener">
       ☕ Apoia no Ko-fi
     </a>
     <div style="margin-top:16px;font-size:11px;color:var(--ant-color-text-tertiary)">
       🌐 <a href="https://3d.monco.io" target="_blank" style="color:#1677ff;text-decoration:none">3d.monco.io</a>
       &nbsp;·&nbsp; MIT License &nbsp;·&nbsp; v50 MVP
+    </div>
+  </div>
+</div>
+
+<!-- Tutorial guiado -->
+<div id="tour" role="dialog" aria-modal="true" aria-labelledby="tour-title">
+  <div id="tour-block"></div>
+  <div id="tour-hole"></div>
+  <div id="tour-card">
+    <button id="tour-skip" onclick="endTour()">Saltar ✕</button>
+    <div class="t-emoji" id="tour-emoji"></div>
+    <h3 id="tour-title"></h3>
+    <div class="t-body" id="tour-body"></div>
+    <div class="t-foot">
+      <div id="tour-dots"></div>
+      <button id="tour-prev" onclick="tourGo(-1)">← Anterior</button>
+      <button id="tour-next" onclick="tourGo(1)">Seguinte →</button>
     </div>
   </div>
 </div>
@@ -3535,6 +3584,128 @@ function toggleLayers(){
   handle.addEventListener('pointerup',()=>{dragging=false;});
 })();
 
+// ═══════════════════════════════════════
+// TUTORIAL — tour guiado pelo produto
+// ═══════════════════════════════════════
+const TOUR_KEY='monco3d_tour_done_v1';
+const TOUR_STEPS=[
+  {emoji:'🤖',title:'Bem-vindo ao 3D Monco!',
+   body:'Aqui transformas desenhos em <b>objetos 3D</b> que podes imprimir numa impressora 3D.<br><br>A ideia é simples: <b>desenhas formas 2D</b>, cada <b>cor dá uma altura</b> diferente, e o Monco transforma tudo em 3D. Vamos ver como!'},
+  {sel:'#lsb',emoji:'🔷',title:'1. Escolhe uma forma',
+   body:'Clica numa forma — quadrado, círculo, estrela, coração… — ou no <b>desenho livre</b> para desenhar à mão.'},
+  {sel:'#stage',emoji:'✏️',title:'2. Desenha no palco',
+   body:'<b>Arrasta</b> no palco para desenhar a forma. Clica numa forma para a <b>selecionar</b> e usa as pegas para <b>mover, esticar e rodar</b>.<br><br>Atalhos: <kbd>Delete</kbd> apaga, <kbd>Ctrl</kbd>+<kbd>Z</kbd> desfaz, <kbd>Espaço</kbd>+arrastar move a vista, a roda do rato faz zoom.'},
+  {sel:'#bot',emoji:'🎨',title:'3. Cores = alturas',
+   body:'Cada cor tem uma <b>espessura</b> em milímetros: é a altura que a forma vai ter em 3D. Faz <b>duplo clique numa cor</b> para mudar a espessura, e usa <b>+</b> para juntar mais cores.<br><br>Aqui também tens desfazer, refazer e limpar tudo.'},
+  {sel:()=>{const h=document.querySelector('#bot .col-sw.hole');return h&&h.closest('.col-wrap');},emoji:'🕳️',title:'4. Fazer furos',
+   body:'A cor <b>Furo</b> é especial: as formas desta cor <b>abrem buracos</b> nas outras. Ótimo para porta-chaves, pendentes ou janelas!'},
+  {sel:'#vp-zoom-bar',emoji:'🔍',title:'Zoom e grelha',
+   body:'Aproxima e afasta, <b>⊡</b> mostra tudo, <b>1:1</b> volta ao tamanho normal. A grelha <b>⊞</b> ajuda a alinhar as formas (tecla <kbd>S</kbd>).'},
+  {sel:'#btn-layers-fixed',emoji:'📚',title:'Camadas',
+   body:'Abre as <b>layers</b> para ver todas as formas, escondê-las ou mudar a ordem.'},
+  {sel:'#btn-3d-float',emoji:'🧊',title:'5. Vê em 3D',
+   body:'Clica em <b>3D</b> para ver o teu modelo em três dimensões. Arrasta para o rodar! Clica outra vez para voltar a desenhar.'},
+  {sel:'#hdr-stl',emoji:'🖨️',title:'6. Imprime!',
+   body:'<b>STL</b> descarrega o ficheiro para a impressora 3D. Abre-o no programa da impressora (slicer) e imprime. A altura do palco corresponde a <b>200 mm</b> — a régua em baixo mostra a escala.'},
+  {sel:'#hdr-save',emoji:'💾',title:'Guardar o trabalho',
+   body:'<b>Guardar</b> descarrega o teu projeto para continuares mais tarde, e <b>Carregar</b> abre-o outra vez. O Monco também guarda automaticamente enquanto trabalhas.'},
+  {sel:'#rsb',emoji:'🏅',title:'Conquistas e certificado',
+   body:'Enquanto crias, ganhas <b>conquistas</b> e <b>pontos</b>. No fim podes gerar o teu <b>🏆 Certificado</b> e partilhá-lo!'},
+  {sel:'#btn-classroom',emoji:'🏫',title:'Sala de aula',
+   body:'<b>Alunos:</b> entram com o código da turma e o trabalho fica guardado para o professor ver.<br><b>Professores:</b> em <b>👩‍🏫 Professor</b> criam atividades e acompanham os trabalhos da turma.'},
+  {sel:'#btn-help',emoji:'🚀',title:'Pronto para criar!',
+   body:'Já sabes tudo! Se precisares, clica em <b>❓ Ajuda</b> para ver este tutorial outra vez. Boas criações!'},
+];
+let tourSteps=[],tourIdx=0;
+
+function tourTarget(st){
+  if(!st.sel)return null;
+  const el=typeof st.sel==='function'?st.sel():document.querySelector(st.sel);
+  if(!el)return null;
+  const r=el.getBoundingClientRect();
+  return (r.width&&r.height&&getComputedStyle(el).visibility!=='hidden')?el:null;
+}
+
+function startTour(){
+  if(mode==='3d')setMode('2d');
+  tourSteps=TOUR_STEPS;
+  tourIdx=0;
+  document.getElementById('tour').classList.add('open');
+  renderTour();
+}
+
+function endTour(){
+  document.getElementById('tour').classList.remove('open');
+  try{ localStorage.setItem(TOUR_KEY,'1'); }catch(e){}
+}
+
+function tourGo(d){
+  // passos cujo alvo não está visível agora (ex: ecrã pequeno) são saltados
+  let n=tourIdx+d;
+  while(n>0&&n<tourSteps.length&&tourSteps[n].sel&&!tourTarget(tourSteps[n]))n+=d;
+  if(n>=tourSteps.length){endTour();return;}
+  if(n<0)return;
+  tourIdx=n;renderTour();
+}
+
+function renderTour(){
+  const st=tourSteps[tourIdx];
+  document.getElementById('tour-emoji').textContent=st.emoji;
+  document.getElementById('tour-title').textContent=st.title;
+  document.getElementById('tour-body').innerHTML=st.body;
+  document.getElementById('tour-prev').style.visibility=tourIdx?'visible':'hidden';
+  document.getElementById('tour-next').textContent=tourIdx===tourSteps.length-1?'Começar! 🎉':'Seguinte →';
+  document.getElementById('tour-dots').innerHTML=tourSteps.map((_,i)=>'<i class="'+(i===tourIdx?'on':'')+'"></i>').join('');
+  positionTour();
+  document.getElementById('tour-next').focus();
+}
+
+function positionTour(){
+  if(!document.getElementById('tour').classList.contains('open'))return;
+  const st=tourSteps[tourIdx];
+  const hole=document.getElementById('tour-hole'),card=document.getElementById('tour-card');
+  const vw=window.innerWidth,vh=window.innerHeight,M=16,G=14;
+  const el=tourTarget(st);
+  if(!el){
+    hole.classList.add('center');
+    Object.assign(hole.style,{left:vw/2+'px',top:vh/2+'px',width:'0px',height:'0px'});
+    card.style.left=Math.max(M,(vw-card.offsetWidth)/2)+'px';
+    card.style.top=Math.max(M,(vh-card.offsetHeight)/2)+'px';
+    return;
+  }
+  hole.classList.remove('center');
+  const r=el.getBoundingClientRect(),P=6;
+  const hr={left:Math.max(2,r.left-P),top:Math.max(2,r.top-P),right:Math.min(vw-2,r.right+P),bottom:Math.min(vh-2,r.bottom+P)};
+  Object.assign(hole.style,{left:hr.left+'px',top:hr.top+'px',width:(hr.right-hr.left)+'px',height:(hr.bottom-hr.top)+'px'});
+  const cw=card.offsetWidth,ch=card.offsetHeight;
+  const clampX=x=>Math.min(Math.max(M,x),vw-cw-M), clampY=y=>Math.min(Math.max(M,y),vh-ch-M);
+  const cx=(hr.left+hr.right)/2-cw/2, cy=(hr.top+hr.bottom)/2-ch/2;
+  let x,y;
+  if(vh-hr.bottom>=ch+G+M){x=clampX(cx);y=hr.bottom+G;}           // por baixo
+  else if(hr.top>=ch+G+M){x=clampX(cx);y=hr.top-G-ch;}            // por cima
+  else if(vw-hr.right>=cw+G+M){x=hr.right+G;y=clampY(cy);}        // à direita
+  else if(hr.left>=cw+G+M){x=hr.left-G-cw;y=clampY(cy);}          // à esquerda
+  else{x=clampX(cx);y=clampY(cy);}                                 // alvo grande (ex: palco): cartão por cima dele
+  card.style.left=x+'px';card.style.top=y+'px';
+}
+
+window.addEventListener('resize',positionTour);
+// Enquanto o tutorial está aberto, as teclas não chegam aos atalhos da app (capture corre antes)
+window.addEventListener('keydown',e=>{
+  if(!document.getElementById('tour').classList.contains('open'))return;
+  if(e.key==='Tab')return;
+  if(e.key==='Escape')endTour();
+  else if(e.key==='ArrowRight'||e.key==='Enter'||e.key===' ')tourGo(1);
+  else if(e.key==='ArrowLeft')tourGo(-1);
+  e.preventDefault();e.stopImmediatePropagation();
+},true);
+
+function maybeStartTour(){
+  let done=false;
+  try{ done=!!localStorage.getItem(TOUR_KEY); }catch(e){}
+  if(!done)setTimeout(startTour,500);
+}
+
 // ── Init ─────────────────────────────────
 // Restaurar sessão do professor (se tiver feito login antes) neste dispositivo
 try{ teacherAuthToken=localStorage.getItem('monco3d_teacher_token_v1')||null; }catch(e){}
@@ -3593,6 +3764,8 @@ try{ teacherAuthToken=localStorage.getItem('monco3d_teacher_token_v1')||null; }c
     const rb=document.getElementById('ruler-bar');
     if(rb&&canvas.height) rb.style.width=Math.round(10*(canvas.height/200)*vpZoom)+'px';
     redraw(); updateAchs();
+    // primeira visita: mostrar o tutorial
+    maybeStartTour();
   },120);
 })();
 updateHistoryBtns();
