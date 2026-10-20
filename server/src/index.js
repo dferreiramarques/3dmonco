@@ -19,7 +19,7 @@ const allowedOrigins = (process.env.ALLOWED_ORIGIN || '')
 
 app.use(cors({
   origin: allowedOrigins.length ? allowedOrigins : true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH']
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 }));
 
 app.get('/', (req, res) => res.json({ ok: true, service: 'monco3d-classroom-api' }));
